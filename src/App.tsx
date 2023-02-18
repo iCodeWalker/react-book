@@ -56,8 +56,7 @@ const App = () => {
   // `;
 
   return (
-    <div style={{margin: 16}}>
-      <CodeCell />
+    <div>
       <CodeCell />
       {/* <div style={{textAlign: 'center', margin: 16}}>
         <CodeEditor

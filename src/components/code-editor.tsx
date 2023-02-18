@@ -57,7 +57,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({initialValue, onChange}) => {
         value={initialValue} // used for initial value only. At time of initialization
         language="javascript"
         theme="dark"
-        height="500px"
+        height="100%"
         options={{
           wordWrap: 'on',
           minimap: {enabled: false},
