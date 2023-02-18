@@ -1,58 +1,31 @@
-import {useState, useEffect, useRef} from 'react';
-import * as esbuild from 'esbuild-wasm';
-import {unpkgPathPlugin} from './plugins/unpkg-path-plugin';
-import {fetchPlugin} from './plugins/fetch-plugin';
-import CodeEditor from './components/code-editor';
+import {useState} from 'react';
+
+// import CodeEditor from './components/code-editor';
+// import Preview from './components/preview';
+// import {Bundler} from './bundler';
+import CodeCell from './components/code-cell';
 
 const App = () => {
-  const ref = useRef<any>();
-  const iframeRef = useRef<any>();
-  const [input, setInput] = useState<string>('');
-  const [codeOutput, setCodeOutput] = useState<string>('');
+  // const [input, setInput] = useState<string>('');
+  // const [codeOutput, setCodeOutput] = useState<string>('');
 
-  const startService = async () => {
-    ref.current = await esbuild.startService({
-      worker: true,
-      wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm',
-    });
-  };
+  // const onSubmitCode = async () => {
+  //   //----- This transform function is used for tanspiling the jsx code into simple js ------
 
-  useEffect(() => {
-    startService();
-  }, []);
+  //   // const result = await ref.current.transform(input, {
+  //   //   loader: "jsx",
+  //   //   target: "es2015",
+  //   // });
 
-  const onSubmitCode = async () => {
-    if (!ref.current) {
-      return;
-    }
+  //   const bundledCode = await Bundler(input);
 
-    iframeRef.current.srcdoc = html;
+  //   setCodeOutput(bundledCode); // Our transpiled and bundled code
 
-    //----- This transform function is used for tanspiling the jsx code into simple js ------
-
-    // const result = await ref.current.transform(input, {
-    //   loader: "jsx",
-    //   target: "es2015",
-    // });
-
-    const result = await ref.current.build({
-      entryPoints: ['index.js'],
-      bundle: true,
-      write: false,
-      plugins: [unpkgPathPlugin(), fetchPlugin(input)],
-      define: {
-        'process.env.NODE_ENV': '"production"',
-        global: 'window',
-      },
-    });
-
-    setCodeOutput(result.outputFiles[0].text); // Our transpiled and bundled code
-
-    iframeRef.current.contentWindow.postMessage(
-      result.outputFiles[0].text,
-      '*',
-    ); // sending our bundled code using message service in iframes
-  };
+  //   // iframeRef.current.contentWindow.postMessage(
+  //   //   result.outputFiles[0].text,
+  //   //   '*',
+  //   // ); // sending our bundled code using message service in iframes
+  // };
 
   // ------- sending input code to iframe using script tag. ---------
   //   const html = `
@@ -62,46 +35,43 @@ const App = () => {
   // `;
 
   // ------- sending input code to iframe using event listener (message). ---------
-  const html = `
-  <html>
-    <head></head>
-    <body>
-      <div id='root'></div>
-      <script>
-        window.addEventListener('message', (event) => {
-          try{
-            eval(event.data);
-          }catch(err){
-            const root = document.querySelector('#root');
-            root.innerHTML = '<div style="color: red"><h4>Runtime Error</h4>' + err + '</div>';
-            console.error(err);
-          }
-        }, false)
-      </script>
-    </body>
-  </html>
-`;
+  //   const html = `
+  //   <html>
+  //     <head></head>
+  //     <body>
+  //       <div id='root'></div>
+  //       <script>
+  //         window.addEventListener('message', (event) => {
+  //           try{
+  //             eval(event.data);
+  //           }catch(err){
+  //             const root = document.querySelector('#root');
+  //             root.innerHTML = '<div style="color: red"><h4>Runtime Error</h4>' + err + '</div>';
+  //             console.error(err);
+  //           }
+  //         }, false)
+  //       </script>
+  //     </body>
+  //   </html>
+  // `;
 
   return (
     <div style={{margin: 16}}>
-      <div style={{textAlign: 'center', margin: 16}}>
+      <CodeCell />
+      <CodeCell />
+      {/* <div style={{textAlign: 'center', margin: 16}}>
         <CodeEditor
           initialValue="const a = 1;"
           onChange={value => setInput(value)}
         />
-        {/* <textarea
-          placeholder="Enter your code here"
-          value={input}
-          onChange={e => setInput(e.target.value)}
-        /> */}
-      </div>
+      </div> */}
 
-      <div>
+      {/* <div>
         <button onClick={onSubmitCode}>Submit</button>
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <pre style={{color: '#fff', marginLeft: '5rem'}}>{codeOutput}</pre>
-      </div>
+      </div> */}
 
       {/* iframe is used to embed or show one html document into another */}
       {/* iframes have different javascript execution context than its parent (in this index.html) */}
@@ -122,7 +92,7 @@ const App = () => {
       {/* <iframe sandbox="" src="http://localhost:3000/test.html" /> */}
 
       {/* For accessing iframe document html locally without any network request */}
-      <iframe
+      {/* <iframe
         ref={iframeRef}
         sandbox="allow-scripts"
         srcDoc={html}
@@ -133,7 +103,8 @@ const App = () => {
           textAlign: 'center',
           margin: 16,
         }}
-      />
+      /> */}
+      {/* <Preview code={codeOutput} /> */}
     </div>
   );
 };
