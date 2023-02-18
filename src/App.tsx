@@ -89,11 +89,11 @@ const App = () => {
           initialValue="const a = 1;"
           onChange={value => setInput(value)}
         />
-        <textarea
+        {/* <textarea
           placeholder="Enter your code here"
           value={input}
           onChange={e => setInput(e.target.value)}
-        />
+        /> */}
       </div>
 
       <div>
