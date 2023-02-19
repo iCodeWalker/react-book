@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {Provider} from 'react-redux';
+import {store} from './state';
 
 // import CodeEditor from './components/code-editor';
 // import Preview from './components/preview';
@@ -57,33 +58,34 @@ const App = () => {
   // `;
 
   return (
-    <div>
-      <TextEditor />
-      {/* <CodeCell /> */}
+    <Provider store={store}>
+      <div>
+        <TextEditor />
+        {/* <CodeCell /> */}
 
-      {/* <div style={{textAlign: 'center', margin: 16}}>
+        {/* <div style={{textAlign: 'center', margin: 16}}>
         <CodeEditor
           initialValue="const a = 1;"
           onChange={value => setInput(value)}
         />
       </div> */}
 
-      {/* <div>
+        {/* <div>
         <button onClick={onSubmitCode}>Submit</button>
       </div> */}
-      {/* <div>
+        {/* <div>
         <pre style={{color: '#fff', marginLeft: '5rem'}}>{codeOutput}</pre>
       </div> */}
 
-      {/* iframe is used to embed or show one html document into another */}
-      {/* iframes have different javascript execution context than its parent (in this index.html) */}
-      {/* 
+        {/* iframe is used to embed or show one html document into another */}
+        {/* iframes have different javascript execution context than its parent (in this index.html) */}
+        {/* 
         ------------ When direct access is allowed between frames -------------
         To allow child access parent : we can use "parent.variable_name" in child 
         To allow parent access child : we can use document.querySelector('iframe').contentWindow.variable_name
       */}
 
-      {/* 
+        {/* 
       ------------------- To continue direct access between frames ----------------
 
       1. iframe element should not have sandbox property on it or should have sandbox='allow-same-origin'
@@ -91,10 +93,10 @@ const App = () => {
           Domain, Port, protocol
       */}
 
-      {/* <iframe sandbox="" src="http://localhost:3000/test.html" /> */}
+        {/* <iframe sandbox="" src="http://localhost:3000/test.html" /> */}
 
-      {/* For accessing iframe document html locally without any network request */}
-      {/* <iframe
+        {/* For accessing iframe document html locally without any network request */}
+        {/* <iframe
         ref={iframeRef}
         sandbox="allow-scripts"
         srcDoc={html}
@@ -106,8 +108,9 @@ const App = () => {
           margin: 16,
         }}
       /> */}
-      {/* <Preview code={codeOutput} /> */}
-    </div>
+        {/* <Preview code={codeOutput} /> */}
+      </div>
+    </Provider>
   );
 };
 
