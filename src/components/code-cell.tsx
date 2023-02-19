@@ -9,11 +9,13 @@ import ResizableWrapper from './resizable-wrapper';
 const CodeCell = () => {
   const [input, setInput] = useState<string>('');
   const [codeOutput, setCodeOutput] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       const bundledCode = await Bundler(input);
-      setCodeOutput(bundledCode);
+      setCodeOutput(bundledCode.code);
+      setError(bundledCode.err);
     }, 1000);
 
     return () => {
@@ -21,11 +23,10 @@ const CodeCell = () => {
     };
   }, [input]);
 
-  const onSubmitCode = async () => {
-    const bundledCode = await Bundler(input);
-
-    setCodeOutput(bundledCode); // Our transpiled and bundled code
-  };
+  // const onSubmitCode = async () => {
+  //   const bundledCode = await Bundler(input);
+  //   setCodeOutput(bundledCode.code); // Our transpiled and bundled code
+  // };
 
   return (
     <ResizableWrapper direction="vertical">
@@ -41,7 +42,7 @@ const CodeCell = () => {
           <button onClick={onSubmitCode}>Submit</button>
         </div> */}
 
-        <Preview code={codeOutput} />
+        <Preview code={codeOutput} err={error} />
       </div>
     </ResizableWrapper>
   );
