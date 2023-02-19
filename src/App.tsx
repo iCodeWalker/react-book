@@ -4,6 +4,7 @@ import {useState} from 'react';
 // import Preview from './components/preview';
 // import {Bundler} from './bundler';
 import CodeCell from './components/code-cell';
+import TextEditor from './components/text-editor';
 
 const App = () => {
   // const [input, setInput] = useState<string>('');
@@ -57,7 +58,9 @@ const App = () => {
 
   return (
     <div>
-      <CodeCell />
+      <TextEditor />
+      {/* <CodeCell /> */}
+
       {/* <div style={{textAlign: 'center', margin: 16}}>
         <CodeEditor
           initialValue="const a = 1;"
