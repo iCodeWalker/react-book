@@ -1,19 +1,26 @@
 import React, {useState, useEffect} from 'react';
+import {useActions} from '../hooks/useActions';
 
 import CodeEditor from './code-editor';
 import Preview from './preview';
 import {Bundler} from '../bundler/';
 
 import ResizableWrapper from './resizable-wrapper';
+import {Cell} from '../state/cell';
 
-const CodeCell = () => {
-  const [input, setInput] = useState<string>('');
+interface CodeCellProps {
+  cell: Cell;
+}
+
+const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
   const [codeOutput, setCodeOutput] = useState<string>('');
   const [error, setError] = useState<string>('');
 
+  const {updateCell} = useActions();
+
   useEffect(() => {
     const timer = setTimeout(async () => {
-      const bundledCode = await Bundler(input);
+      const bundledCode = await Bundler(cell.data);
       setCodeOutput(bundledCode.code);
       setError(bundledCode.err);
     }, 1000);
@@ -21,7 +28,7 @@ const CodeCell = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, [input]);
+  }, [cell.data]);
 
   // const onSubmitCode = async () => {
   //   const bundledCode = await Bundler(input);
@@ -30,11 +37,16 @@ const CodeCell = () => {
 
   return (
     <ResizableWrapper direction="vertical">
-      <div style={{height: '100%', display: 'flex', flexDirection: 'row'}}>
+      <div
+        style={{
+          height: 'calc(100% - 10px)',
+          display: 'flex',
+          flexDirection: 'row',
+        }}>
         <ResizableWrapper direction="horizontal">
           <CodeEditor
-            initialValue="const a = 1;"
-            onChange={value => setInput(value)}
+            initialValue={cell.data}
+            onChange={value => updateCell(cell.id, value)}
           />
         </ResizableWrapper>
 

@@ -6,6 +6,7 @@ import {store} from './state';
 // import {Bundler} from './bundler';
 import CodeCell from './components/code-cell';
 import TextEditor from './components/text-editor';
+import CellList from './components/cell-list';
 
 const App = () => {
   // const [input, setInput] = useState<string>('');
@@ -60,7 +61,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <div>
-        <TextEditor />
+        <CellList />
         {/* <CodeCell /> */}
 
         {/* <div style={{textAlign: 'center', margin: 16}}>

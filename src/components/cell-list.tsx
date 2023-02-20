@@ -1,0 +1,33 @@
+import {Fragment} from 'react';
+
+import {useTypedSelector} from '../hooks/useTypedSelector';
+import CellListItem from './cell-list-item';
+import {Cell} from '../state/cell';
+import AddCell from './add-cell';
+
+const CellList: React.FC = () => {
+  const cells = useTypedSelector(state => {
+    const {cells} = state;
+    const {data, order} = cells;
+
+    return order.map((id: string) => {
+      return data[id];
+    });
+  });
+
+  const renderedCellsList = cells.map((cell: Cell) => (
+    <Fragment key={cell.id}>
+      <CellListItem cell={cell} />
+      <AddCell previousCellId={cell.id} />
+    </Fragment>
+  ));
+
+  return (
+    <div>
+      <AddCell forceVisible={cells.length === 0} previousCellId={null} />
+      {renderedCellsList}
+    </div>
+  );
+};
+
+export default CellList;

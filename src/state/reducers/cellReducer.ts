@@ -21,7 +21,7 @@ const initialState: CellState = {
 };
 
 const cellReducer = produce(
-  (state: CellState = initialState, action: Action) => {
+  (state: CellState = initialState, action: Action): CellState => {
     switch (action.type) {
       case ActionType.UPDATE_CELL:
         const {id, data} = action.payload;
@@ -49,7 +49,7 @@ const cellReducer = produce(
         state.order = state.order.filter(id => id !== action.payload); // for deleting from array
 
         return state;
-      case ActionType.INSERT_CELL_BEFORE:
+      case ActionType.INSERT_CELL_AFTER:
         const newCell: Cell = {
           id: randomId(),
           type: action.payload.type,
@@ -63,9 +63,9 @@ const cellReducer = produce(
         );
 
         if (currentIndex < 0) {
-          state.order.push(newCell.id);
+          state.order.unshift(newCell.id);
         } else {
-          state.order.splice(currentIndex, 0, newCell.id);
+          state.order.splice(currentIndex + 1, 0, newCell.id);
         }
         return state;
 
@@ -73,6 +73,7 @@ const cellReducer = produce(
         return state;
     }
   },
+  initialState,
 );
 
 const randomId = () => {
