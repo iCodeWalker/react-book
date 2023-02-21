@@ -20,20 +20,40 @@ const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
 
   const bundleData = useTypedSelector(state => state.bundles[cell.id]);
 
+  const cummalativeCode = useTypedSelector(state => {
+    const {data, order} = state.cells;
+
+    const orderedCells = order.map(id => data[id]);
+
+    const cummalativeCode = [];
+
+    for (let c of orderedCells) {
+      if (c.type === 'code') {
+        cummalativeCode.push(c.data);
+      }
+      if (c.id === cell.id) {
+        break;
+      }
+    }
+    return cummalativeCode;
+  });
+
+  console.log(cummalativeCode);
+
   useEffect(() => {
     if (!bundleData) {
-      createBundle(cell.id, cell.data);
+      createBundle(cell.id, cummalativeCode.join('\n'));
       return;
     }
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.data);
+      createBundle(cell.id, cummalativeCode.join('\n'));
     }, 1000);
 
     return () => {
       clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.id, cell.data, createBundle]);
+  }, [cell.id, cummalativeCode.join('\n'), createBundle]);
 
   // const onSubmitCode = async () => {
   //   const bundledCode = await Bundler(input);
