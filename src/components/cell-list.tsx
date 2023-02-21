@@ -5,6 +5,8 @@ import CellListItem from './cell-list-item';
 import {Cell} from '../state/cell';
 import AddCell from './add-cell';
 
+import './cell-list.css';
+
 const CellList: React.FC = () => {
   const cells = useTypedSelector(state => {
     const {cells} = state;
@@ -23,7 +25,7 @@ const CellList: React.FC = () => {
   ));
 
   return (
-    <div>
+    <div className="cell-list">
       <AddCell forceVisible={cells.length === 0} previousCellId={null} />
       {renderedCellsList}
     </div>
